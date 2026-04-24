@@ -21,6 +21,12 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link Login#newInstance} factory method to
@@ -99,8 +105,42 @@ public class Login extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            startActivity(new Intent(requireActivity(), Main.class));
-                            requireActivity().finish();
+                            String uid = auth.getUid();
+                            if (uid != null) {
+                                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+                                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        if (snapshot.exists()) {
+                                            String username = snapshot.child("username").getValue(String.class);
+                                            String password = snapshot.child("password").getValue(String.class);
+                                            String name = snapshot.child("name").getValue(String.class);
+                                            String accountType = snapshot.child("accountType").getValue(String.class);
+                                            String code = snapshot.child("code").getValue(String.class);
+                                            String phone = snapshot.child("phone").getValue(String.class);
+                                            String gender = snapshot.child("gender").getValue(String.class);
+                                            String country = snapshot.child("country").getValue(String.class);
+                                            String address = snapshot.child("residential_add").getValue(String.class);
+
+                                            MyApplication.user = new User(username, password, name, accountType, code, phone, gender, country, address);
+
+                                            if ("Seller".equalsIgnoreCase(accountType)) {
+                                                startActivity(new Intent(requireActivity(), Seller_Home.class));
+                                            } else {
+                                                startActivity(new Intent(requireActivity(), Main.class));
+                                            }
+                                            requireActivity().finish();
+                                        } else {
+                                            Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+                                        Toast.makeText(context, "Database error: " + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

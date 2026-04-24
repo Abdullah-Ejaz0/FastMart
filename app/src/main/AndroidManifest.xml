@@ -20,7 +20,7 @@
         android:theme="@style/Theme.FastMart"
         android:windowSoftInputMode="stateHidden|adjustResize">
         <activity
-            android:name=".Splash"
+            android:name=".Seller_Home"
             android:exported="false" />
         <activity
             android:name=".Info_Page"
@@ -44,7 +44,7 @@
             android:name=".MainActivity"
             android:exported="false" />
         <activity
-            android:name=".Seller_Home"
+            android:name=".Splash"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

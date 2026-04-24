@@ -132,7 +132,11 @@ public class Info_Page extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(Info_Page.this, "Profile Saved Successful!", Toast.LENGTH_SHORT).show();
                         user.sendEmailVerification();
-                        startActivity(new Intent(Info_Page.this, Main.class));
+                        if ("Seller".equalsIgnoreCase(accountType)) {
+                            startActivity(new Intent(Info_Page.this, Seller_Home.class));
+                        } else {
+                            startActivity(new Intent(Info_Page.this, Main.class));
+                        }
                         finish();
                     })
                     .addOnFailureListener(e -> {
