@@ -35,6 +35,31 @@ public class ItemList {
         return favourites;
     }
     public void populate() {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("products");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                products.clear();
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    items item = data.getValue(items.class);
+                    if (item != null) {
+                        if (MyApplication.favModels.contains(item.getModel())) {
+                            item.setFavourite(true);
+                        }
+                        products.add(item);
+                    }
+                }
+                MyApplication.notifyFavouritesChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle error
+            }
+        });
+    }
+
+    public void populatelocal() {
 
         String name, model, newPrice, originalPrice, description, sDesc, type;
         int img;
@@ -356,6 +381,26 @@ public class ItemList {
 
     public void removeItem(String Model){
         products.removeIf(product -> product.model.equals(Model));
+    }
+
+    public ArrayList<items> getDotdProducts() {
+        ArrayList<items> dotdList = new ArrayList<>();
+        for (items item : products) {
+            if (item.isDotd()) {
+                dotdList.add(item);
+            }
+        }
+        return dotdList;
+    }
+
+    public ArrayList<items> getRecomProducts() {
+        ArrayList<items> recomList = new ArrayList<>();
+        for (items item : products) {
+            if (!item.isDotd()) {
+                recomList.add(item);
+            }
+        }
+        return recomList;
     }
 
     public ArrayList<items> getProducts() {

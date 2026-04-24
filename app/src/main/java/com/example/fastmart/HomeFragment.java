@@ -90,9 +90,9 @@ public class HomeFragment extends Fragment {
         rvDOTD.setHasFixedSize(true);
         rvRecom.setHasFixedSize(true);
 
-        dotdAdapter = new DotdAdapter(view.getContext(), MyApplication.stock.getProducts());
+        dotdAdapter = new DotdAdapter(view.getContext(), MyApplication.stock.getDotdProducts());
         rvDOTD.setAdapter(dotdAdapter);
-        recomAdapter = new RecomAdapter(view.getContext(), MyApplication.stock.getProducts());
+        recomAdapter = new RecomAdapter(view.getContext(), MyApplication.stock.getRecomProducts());
         rvRecom.setAdapter(recomAdapter);
 
         rvDOTD.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));

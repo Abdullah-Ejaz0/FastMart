@@ -46,7 +46,7 @@ public class RecomAdapter extends RecyclerView.Adapter<RecomAdapter.RecomViewHol
 
     @Override
     public void onBindViewHolder(@NonNull RecomViewHolder holder, int position) {
-        items item = list.get(position + 3);
+        items item = list.get(position);
         if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
             Glide.with(context).load(item.getImageUrl()).into(holder.img);
         } else {
@@ -97,7 +97,7 @@ public class RecomAdapter extends RecyclerView.Adapter<RecomAdapter.RecomViewHol
 
     @Override
     public int getItemCount() {
-        return list.size() - 3;
+        return list.size();
     }
 
     public class RecomViewHolder extends RecyclerView.ViewHolder

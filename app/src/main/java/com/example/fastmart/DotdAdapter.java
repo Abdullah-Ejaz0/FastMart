@@ -104,7 +104,7 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
 
     @Override
     public int getItemCount() {
-        return 3;
+        return list.size();
     }
 
     public class DotdViewHolder extends RecyclerView.ViewHolder
