@@ -7,6 +7,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,5 +67,26 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        TextInputEditText name = view.findViewById(R.id.profileName);
+        TextInputEditText email = view.findViewById(R.id.profileEmail);
+        TextInputEditText accountType = view.findViewById(R.id.profileAccountType);
+        TextInputEditText gender = view.findViewById(R.id.profileGender);
+        TextInputEditText phone = view.findViewById(R.id.profilePhone);
+
+        User currentUser = MyApplication.user;
+
+        if (currentUser != null) {
+            name.setText(currentUser.getName());
+            email.setText(currentUser.getUsername());
+            accountType.setText(currentUser.getAccountType());
+            gender.setText(currentUser.getGender());
+            phone.setText(currentUser.getPhone());
+        }
     }
 }

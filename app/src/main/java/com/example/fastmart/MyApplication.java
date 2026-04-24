@@ -15,10 +15,12 @@ public class MyApplication extends Application {
     public static HomeFragment homeFragment;
     public static FavouritesFragment favouritesFragment;
     public static CartFragment cartFragment;
+    public static Seller_Home sellerHome;
     public static ArrayList<String> favList;
     public static ItemList stock;
     public static ItemList cart;
     public static BadgeDrawable favouritesBadge;
+    public static User user;
 
     @Override
     public void onCreate() {
@@ -46,6 +48,10 @@ public class MyApplication extends Application {
 
         if (favouritesFragment != null && favouritesFragment.adapter != null) {
             favouritesFragment.adapter.notifyDataSetChanged();
+        }
+
+        if (sellerHome != null && sellerHome.sellerAdapter != null) {
+            sellerHome.sellerAdapter.notifyDataSetChanged();
         }
     }
 }

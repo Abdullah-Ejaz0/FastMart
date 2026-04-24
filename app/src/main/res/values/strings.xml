@@ -46,4 +46,23 @@
     <string name="cart">cart</string>
     <string name="shipping">Shipping</string>
     <string name="_0_00">$0.00</string>
+    <string name="complete_your_profile">Complete your Profile</string>
+    <string name="step_2_of_2">Step 2 of 2</string>
+    <string name="account_type">Account Type</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="select_account_type">Select account type</string>
+    <string name="country_code_hint">+1</string>
+    <string name="enter_phone_number">Enter phone number</string>
+    <string name="female">Female</string>
+    <string name="country">Country</string>
+    <string name="enter_your_country">Enter your country</string>
+    <string name="residential_address">Residential Address</string>
+    <string name="enter_your_residential_address">Enter your residential address</string>
+    <string name="terms_and_privacy">I agree to the Terms of Service and Privacy Policy. We use your data to personalize your curated experience.</string>
+    <string name="save_profile">Save Profile</string>
+    <string name="hello_user">Hello %s</string>
+    <string name="total_products">Total Products</string>
+    <string name="add_product">Add Product</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

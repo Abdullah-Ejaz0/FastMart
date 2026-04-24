@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +29,7 @@ public class Signup extends Fragment {
     TextInputEditText email, pass, cPass;
     SharedPreferences sPref;
     SharedPreferences.Editor editor;
+    FirebaseAuth auth;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -96,12 +98,18 @@ public class Signup extends Fragment {
                 return;
             }
 
-            editor.putString("email", Email)
-                    .putString("password", Password)
-                    .putBoolean("login", true)
-                    .commit();
-            startActivity(new Intent(context, Main.class));
-            requireActivity().finish();
+            auth.createUserWithEmailAndPassword(Email, Password)
+                    .addOnSuccessListener(authResult -> {
+                        editor.putBoolean("login", true).commit();
+                        Intent i = new Intent(context, Info_Page.class);
+                        startActivity(i);
+                        i.putExtra("email", Email);
+                        i.putExtra("password", Password);
+                        requireActivity().finish();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    });
         });
     }
 
@@ -112,5 +120,6 @@ public class Signup extends Fragment {
         cPass = view.findViewById(R.id.tiet_cpass);
         sPref = view.getContext().getSharedPreferences("User", Context.MODE_PRIVATE);
         editor = sPref.edit();
+        auth = FirebaseAuth.getInstance();
     }
 }

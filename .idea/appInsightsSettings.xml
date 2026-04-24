@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.fastmart" />
+                  <option name="mobileSdkAppId" value="1:25011768894:android:2213802e56fb0a53890b6f" />
+                  <option name="projectId" value="fastmart-ecommerce" />
+                  <option name="projectNumber" value="25011768894" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

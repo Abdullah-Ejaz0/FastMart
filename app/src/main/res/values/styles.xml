@@ -1,0 +1,8 @@
+<resources>
+    <style name="DrawerNavigationStyle">
+        <item name="android:background">@color/white</item>
+        <item name="itemIconTint">@color/drawer_item_tint</item>
+        <item name="itemTextColor">@color/drawer_item_tint</item>
+        <item name="itemBackground">@drawable/drawer_item_background</item>
+    </style>
+</resources>

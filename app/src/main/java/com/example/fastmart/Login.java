@@ -14,8 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +32,7 @@ public class Login extends Fragment {
     TextInputEditText email, pass;
     SharedPreferences sPref;
     SharedPreferences.Editor editor;
+    FirebaseAuth auth;
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -90,13 +95,21 @@ public class Login extends Fragment {
                 return;
             }
 
-            if (Email.equals(sPref.getString("email", "")) && Password.equals(sPref.getString("password", ""))) {
-                editor.putBoolean("login", true).commit();
-                startActivity(new Intent(context, Main.class));
-                requireActivity().finish();
-            }else{
-                Toast.makeText(context, "Email or Password is incorrect", Toast.LENGTH_SHORT).show();
-            }
+            auth.signInWithEmailAndPassword(Email, Password)
+                    .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                        @Override
+                        public void onSuccess(AuthResult authResult) {
+                            startActivity(new Intent(requireActivity(), Main.class));
+                            requireActivity().finish();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(requireActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
         });
     }
 
@@ -106,5 +119,6 @@ public class Login extends Fragment {
         pass = view.findViewById(R.id.tiet_pass);
         sPref = view.getContext().getSharedPreferences("User", Context.MODE_PRIVATE);
         editor = sPref.edit();
+        auth = FirebaseAuth.getInstance();
     }
 }
