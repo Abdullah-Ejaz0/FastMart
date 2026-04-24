@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import android.content.SharedPreferences;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputEditText;
@@ -104,7 +105,6 @@ public class Info_Page extends AppCompatActivity {
         String address = etAddress.getText().toString().trim();
         boolean agreed = cbTerms.isChecked();
 
-        // Get selected gender
         int checkedId = genderToggleGroup.getCheckedButtonId();
         String gender = "";
         if (checkedId == R.id.btnMale) {
@@ -113,7 +113,6 @@ public class Info_Page extends AppCompatActivity {
             gender = "Female";
         }
 
-        // Validation
         if (fullName.isEmpty() || accountType.isEmpty() || code.isEmpty() || phone.isEmpty() ||
                 country.isEmpty() || address.isEmpty() || gender.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
@@ -125,9 +124,23 @@ public class Info_Page extends AppCompatActivity {
             return;
         }
 
-        MyApplication.user = new User(email, password, fullName, accountType, code, phone, gender, country, address);
+        MyApplication.user = new User(email, fullName, accountType, code, phone, gender, country, address);
 
         if (user != null) {
+            // Save user session to SharedPreferences
+            SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("userId", user.getUid());
+            editor.putString("userName", fullName);
+            editor.putString("userEmail", email);
+            editor.putString("accountType", accountType);
+            editor.putString("userPhone", phone);
+            editor.putString("userGender", gender);
+            editor.putString("userCountry", country);
+            editor.putString("userAddress", address);
+            editor.putBoolean("login", true);
+            editor.apply();
+
             dbReference.child(user.getUid()).setValue(MyApplication.user)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(Info_Page.this, "Profile Saved Successful!", Toast.LENGTH_SHORT).show();

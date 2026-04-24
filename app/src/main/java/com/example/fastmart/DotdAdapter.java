@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -47,7 +49,11 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
     @Override
     public void onBindViewHolder(@NonNull DotdViewHolder holder, int position) {
         items item = list.get(position);
-        holder.img.setImageResource(item.getImage());
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+            Glide.with(context).load(item.getImageUrl()).into(holder.img);
+        } else {
+            holder.img.setImageResource(item.getImage());
+        }
         holder.description.setText(item.getsDesc());
         holder.newPrice.setText(item.getNewPrice());
         holder.originalPrice.setText(item.getOriginalPrice());

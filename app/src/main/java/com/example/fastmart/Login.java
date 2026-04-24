@@ -112,24 +112,30 @@ public class Login extends Fragment {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                                         if (snapshot.exists()) {
-                                            String username = snapshot.child("username").getValue(String.class);
-                                            String password = snapshot.child("password").getValue(String.class);
-                                            String name = snapshot.child("name").getValue(String.class);
-                                            String accountType = snapshot.child("accountType").getValue(String.class);
-                                            String code = snapshot.child("code").getValue(String.class);
-                                            String phone = snapshot.child("phone").getValue(String.class);
-                                            String gender = snapshot.child("gender").getValue(String.class);
-                                            String country = snapshot.child("country").getValue(String.class);
-                                            String address = snapshot.child("residential_add").getValue(String.class);
+                                            User user = snapshot.getValue(User.class);
+                                            MyApplication.user = user;
 
-                                            MyApplication.user = new User(username, password, name, accountType, code, phone, gender, country, address);
+                                            if (user != null) {
+                                                // Save session to SharedPreferences
+                                                SharedPreferences.Editor editor = sPref.edit();
+                                                editor.putString("userId", uid);
+                                                editor.putString("userName", user.getName());
+                                                editor.putString("userEmail", user.getEmail());
+                                                editor.putString("accountType", user.getAccountType());
+                                                editor.putString("userPhone", user.getPhone());
+                                                editor.putString("userGender", user.getGender());
+                                                editor.putString("userCountry", user.getCountry());
+                                                editor.putString("userAddress", user.getResidential_add());
+                                                editor.putBoolean("login", true);
+                                                editor.apply();
 
-                                            if ("Seller".equalsIgnoreCase(accountType)) {
-                                                startActivity(new Intent(requireActivity(), Seller_Home.class));
-                                            } else {
-                                                startActivity(new Intent(requireActivity(), Main.class));
+                                                if ("Seller".equalsIgnoreCase(user.getAccountType())) {
+                                                    startActivity(new Intent(requireActivity(), Seller_Home.class));
+                                                } else {
+                                                    startActivity(new Intent(requireActivity(), Main.class));
+                                                }
+                                                requireActivity().finish();
                                             }
-                                            requireActivity().finish();
                                         } else {
                                             Toast.makeText(context, "User data not found", Toast.LENGTH_SHORT).show();
                                         }

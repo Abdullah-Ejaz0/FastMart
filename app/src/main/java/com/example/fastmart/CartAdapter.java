@@ -8,6 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -46,7 +49,12 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.newPrice.setText(item.getNewPrice());
         holder.originalPrice.setText(item.getOriginalPrice());
         holder.quantity.setText(String.valueOf(item.getQuantity()));
-        holder.image.setImageResource(item.getImage());
+
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+            Glide.with(context).load(item.getImageUrl()).into(holder.image);
+        } else {
+            holder.image.setImageResource(item.getImage());
+        }
 
         if(item.getQuantity() <= 1){
             holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.gray));

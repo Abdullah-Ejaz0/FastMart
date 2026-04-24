@@ -9,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,7 +45,11 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
     @Override
     public void onBindViewHolder(@NonNull SellerViewHolder holder, int position) {
         items item = list.get(position);
-        holder.img.setImageResource(item.getImage());
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+            Glide.with(context).load(item.getImageUrl()).into(holder.img);
+        } else {
+            holder.img.setImageResource(item.getImage());
+        }
         holder.desc.setText(item.getsDesc());
         holder.price.setText(item.getOriginalPrice());
         holder.name.setText(item.getName());

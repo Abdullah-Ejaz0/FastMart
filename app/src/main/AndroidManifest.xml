@@ -6,7 +6,9 @@
         android:name="android.hardware.telephony"
         android:required="false" />
 
-    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission
+        android:name="android.permission.SEND_SMS"
+        tools:ignore="SmsAndCallLogPolicy" />
 
     <application
         android:name=".MyApplication"
@@ -19,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FastMart"
         android:windowSoftInputMode="stateHidden|adjustResize">
+        <activity
+            android:name=".OrderHistory"
+            android:exported="false"
+            android:theme="@style/Theme.FastMart" />
         <activity
             android:name=".Seller_Home"
             android:exported="false" />

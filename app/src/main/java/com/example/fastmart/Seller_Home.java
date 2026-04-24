@@ -1,11 +1,13 @@
 package com.example.fastmart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.content.Intent;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,7 +92,7 @@ public class Seller_Home extends AppCompatActivity implements NavigationView.OnN
 
         if (MyApplication.user != null) {
             if (navUserName != null) navUserName.setText(MyApplication.user.getName());
-            if (navUserEmail != null) navUserEmail.setText(MyApplication.user.getUsername());
+            if (navUserEmail != null) navUserEmail.setText(MyApplication.user.getEmail());
         }
 
         // Setup Theme Switcher logic
@@ -119,11 +121,22 @@ public class Seller_Home extends AppCompatActivity implements NavigationView.OnN
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.nav_home) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+            findViewById(R.id.home_content).setVisibility(View.VISIBLE);
+            findViewById(R.id.fabAddProduct).setVisibility(View.VISIBLE);
+            // Remove the fragment if it exists
+            androidx.fragment.app.Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            if (fragment != null) {
+                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+            }
         } else if (id == R.id.nav_order_history) {
-            Toast.makeText(Seller_Home.this, "Order History", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, OrderHistory.class));
         } else if (id == R.id.nav_account_settings) {
-            Toast.makeText(Seller_Home.this, "Account Settings", Toast.LENGTH_SHORT).show();
+            findViewById(R.id.home_content).setVisibility(View.GONE);
+            findViewById(R.id.fabAddProduct).setVisibility(View.GONE);
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_container, new ProfileFragment())
+                    .addToBackStack(null)
+                    .commit();
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

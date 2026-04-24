@@ -8,7 +8,6 @@
     android:background="@color/white"
     tools:context=".Seller_Home">
 
-    <!-- Main Content -->
     <LinearLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
@@ -31,6 +30,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:id="@+id/home_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
@@ -88,7 +88,6 @@
         </FrameLayout>
     </LinearLayout>
 
-    <!-- Custom Drawer Content -->
     <LinearLayout
         android:id="@+id/drawer_content"
         android:layout_width="280dp"
@@ -112,7 +111,6 @@
             app:itemBackground="@drawable/drawer_item_background"
             android:background="@color/white" />
 
-        <!-- Footer Section (Theme Switcher) -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -149,7 +147,6 @@
                     android:contentDescription="@string/app_name" />
             </LinearLayout>
 
-            <!-- Theme Switcher UI -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"

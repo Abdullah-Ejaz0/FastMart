@@ -100,11 +100,15 @@ public class Signup extends Fragment {
 
             auth.createUserWithEmailAndPassword(Email, Password)
                     .addOnSuccessListener(authResult -> {
-                        editor.putBoolean("login", true).commit();
+                        // Store partial data for profile/session consistency
+                        editor.putString("userEmail", Email);
+                        editor.putString("userId", auth.getUid());
+                        editor.apply();
+
                         Intent i = new Intent(context, Info_Page.class);
-                        startActivity(i);
                         i.putExtra("email", Email);
                         i.putExtra("password", Password);
+                        startActivity(i);
                         requireActivity().finish();
                     })
                     .addOnFailureListener(e -> {

@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -46,7 +48,11 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     @Override
     public void onBindViewHolder(@NonNull FavouriteViewHolder holder, int position) {
         items item = MyApplication.stock.getProduct(favouriteList.get(position));
-        holder.img.setImageResource(item.getImage());
+        if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
+            Glide.with(context).load(item.getImageUrl()).into(holder.img);
+        } else {
+            holder.img.setImageResource(item.getImage());
+        }
         holder.name.setText(item.getName());
         holder.model.setText(item.getModel());
         if(item.isDotd()){

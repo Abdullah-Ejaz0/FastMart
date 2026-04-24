@@ -1,5 +1,8 @@
 package com.example.fastmart;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,13 +10,14 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -75,7 +79,7 @@ public class ProfileFragment extends Fragment {
 
         TextInputEditText name = view.findViewById(R.id.profileName);
         TextInputEditText email = view.findViewById(R.id.profileEmail);
-        TextInputEditText accountType = view.findViewById(R.id.profileAccountType);
+        TextInputEditText dob = view.findViewById(R.id.profileDOB);
         TextInputEditText gender = view.findViewById(R.id.profileGender);
         TextInputEditText phone = view.findViewById(R.id.profilePhone);
 
@@ -83,10 +87,30 @@ public class ProfileFragment extends Fragment {
 
         if (currentUser != null) {
             name.setText(currentUser.getName());
-            email.setText(currentUser.getUsername());
-            accountType.setText(currentUser.getAccountType());
+            email.setText(currentUser.getEmail());
+            dob.setText("12/05/1998"); // Arbitrary DOB
             gender.setText(currentUser.getGender());
             phone.setText(currentUser.getPhone());
         }
+
+        TextView btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(v -> {
+            // 1. Set login boolean to False in SharedPreferences
+            SharedPreferences sPref = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE);
+            sPref.edit().putBoolean("login", false).apply();
+
+            // 2. Set MyApplication.user = null
+            MyApplication.user = null;
+
+            // 3. Sign out from Firebase
+            FirebaseAuth.getInstance().signOut();
+
+            // 4. Redirect to Welcome activity (contains login/signup)
+            Intent intent = new Intent(requireActivity(), Welcome.class);
+            startActivity(intent);
+            requireActivity().finish();
+
+            Toast.makeText(getContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
     }
 }

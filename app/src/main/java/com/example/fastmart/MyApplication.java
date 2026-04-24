@@ -26,7 +26,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         stock = new ItemList();
-        stock.populate();
+        stock.populate(); // Start listening to Firebase
         cart = new ItemList();
         SharedPreferences sPref = getSharedPreferences("FavouritesPrefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sPref.edit();

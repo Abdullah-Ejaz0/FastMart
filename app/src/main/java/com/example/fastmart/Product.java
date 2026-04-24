@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,7 +48,11 @@ public class Product extends AppCompatActivity {
         product = findProduct();
 
         if (product != null){
-            img.setImageResource(product.image);
+            if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
+                Glide.with(this).load(product.getImageUrl()).into(img);
+            } else {
+                img.setImageResource(product.image);
+            }
             price.setText(product.newPrice);
             name.setText(product.name);
             model.setText(product.model);

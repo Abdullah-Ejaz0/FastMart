@@ -21,6 +21,13 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class Welcome extends AppCompatActivity {
     TabLayout WelcomeTab;
     ViewPager2 WelcomePager;
@@ -43,10 +50,39 @@ public class Welcome extends AppCompatActivity {
 
         init();
 
-        if(sPref.getBoolean("login", false)){
-            startActivity(new Intent(this, Main.class));
-            finish();
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (sPref.getBoolean("login", false) && firebaseUser != null) {
+            // Re-fetch user data to populate MyApplication.user
+            FirebaseDatabase.getInstance().getReference("Users")
+                    .child(firebaseUser.getUid())
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                MyApplication.user = snapshot.getValue(User.class);
+                                String accountType = sPref.getString("accountType", "");
+                                if ("Seller".equalsIgnoreCase(accountType)) {
+                                    startActivity(new Intent(Welcome.this, Seller_Home.class));
+                                } else {
+                                    startActivity(new Intent(Welcome.this, Main.class));
+                                }
+                                finish();
+                            } else {
+                                // Data missing, force re-login
+                                proceedToWelcome();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            proceedToWelcome();
+                        }
+                    });
         }
+    }
+
+    private void proceedToWelcome() {
+        // Keep the user on the welcome screen if auto-login fails
     }
 
     private void init(){
