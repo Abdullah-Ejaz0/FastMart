@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".Home">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/black"
+        android:text="Welcome"
+        android:textSize="45sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Deals of the day"
+        android:layout_marginTop="15dp"
+        android:textColor="@color/black"
+        android:gravity="center_horizontal"
+        android:textSize="25sp"
+        android:textStyle="bold"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:layout_margin="20dp"
+        android:id="@+id/deal"
+        >
+
+        <ImageView
+            android:layout_width="170dp"
+            android:layout_height="170dp"
+            android:layout_marginTop="50dp"
+            android:src="@drawable/rode_mic"
+            android:id="@+id/deal_img"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/deal_img"
+            android:text="microphones"
+            android:layout_marginTop="70dp"
+            android:textColor="@color/subtext"
+            android:textStyle="bold"
+            android:id="@+id/deal_type"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/deal_img"
+            android:layout_below="@id/deal_type"
+            android:text="$108.20"
+            android:layout_marginTop="5dp"
+            android:textColor="#FF0000"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/deal_price"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/deal_img"
+            android:layout_below="@id/deal_price"
+            android:text="RØDE PodMic"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:id="@+id/deal_name"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/deal_img"
+            android:layout_below="@id/deal_name"
+            android:text="Dynamic Microphone, Speaker Microphone"
+            android:textColor="@color/subtext"
+            android:fontFamily="sans-serif-condensed-medium"
+            android:id="@+id/deal_desc"/>
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="15dp"
+        android:textColor="@color/black"
+        android:text="Recommended for you"
+        android:textSize="30sp"
+        android:textStyle="bold"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:id="@+id/recom_left">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="140dp"
+                android:src="@drawable/headphone_black"
+                android:background="@color/grey"
+                android:padding="20dp"
+                android:id="@+id/recom_left_img"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="$349.99"
+                android:textColor="@color/black"
+                android:layout_below="@id/recom_left_img"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:id="@+id/recom_left_price"
+                android:layout_marginHorizontal="5dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sony Premium Wireless Headphones"
+                android:textColor="@color/black"
+                android:layout_below="@id/recom_left_price"
+                android:textSize="15sp"
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/recom_left_name"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Model:WH1000XM4, Black"
+                android:textColor="@color/subtext"
+                android:textStyle="bold"
+                android:layout_below="@id/recom_left_name"
+                android:textSize="11sp"
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/recom_left_desc"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:id="@+id/recom_right">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="140dp"
+                android:src="@drawable/headphone_beige"
+                android:background="@color/grey"
+                android:id="@+id/recom_right_img"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="$349.99"
+                android:textColor="@color/black"
+                android:layout_below="@id/recom_right_img"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="3dp"
+                android:id="@+id/recom_right_price"
+                android:layout_marginHorizontal="5dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sony Premium Wireless Headphones"
+                android:textColor="@color/black"
+                android:layout_below="@id/recom_right_price"
+                android:textSize="15sp"
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/recom_right_name"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Model:WH1000XM4, Beige"
+                android:textColor="@color/subtext"
+                android:textStyle="bold"
+                android:layout_below="@id/recom_right_name"
+                android:textSize="11sp"
+                android:layout_marginHorizontal="5dp"
+                android:id="@+id/recom_right_desc"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

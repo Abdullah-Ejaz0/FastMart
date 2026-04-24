@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="154dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:id="@+id/recom_main"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/recom_img_con"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        app:cardCornerRadius="20dp">
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="140dp"
+            android:src="@drawable/headphone_black"
+            android:id="@+id/recom_img"
+            android:background="@color/grey"
+            android:padding="20dp" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@color/white"
+        app:cardCornerRadius="20dp"
+        android:layout_alignTop="@id/recom_img_con"
+        android:layout_alignEnd="@id/recom_img_con"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recom_fav"
+            android:src="@drawable/ic_favorite_empty"
+            android:scaleType="centerInside"/>
+    </androidx.cardview.widget.CardView>
+
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/price"
+            android:textColor="@color/black"
+            android:layout_below="@id/recom_img_con"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="3dp"
+            android:id="@+id/recom_price"
+            android:layout_marginHorizontal="5dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/model"
+        android:textColor="@color/black"
+        android:layout_below="@id/recom_price"
+        android:textSize="15sp"
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/recom_name"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/model_name"
+        android:textColor="@color/subtext"
+        android:textStyle="bold"
+        android:layout_below="@id/recom_name"
+        android:textSize="11sp"
+        android:layout_marginHorizontal="5dp"
+        android:id="@+id/recom_desc"/>
+
+
+</RelativeLayout>
