@@ -22,6 +22,9 @@
         android:theme="@style/Theme.FastMart"
         android:windowSoftInputMode="stateHidden|adjustResize">
         <activity
+            android:name=".AddProduct"
+            android:exported="false" />
+        <activity
             android:name=".OrderHistory"
             android:exported="false"
             android:theme="@style/Theme.FastMart" />

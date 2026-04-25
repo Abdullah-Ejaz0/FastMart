@@ -1,44 +1,30 @@
 package com.example.fastmart;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ProfileFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class ProfileFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public ProfileFragment() {
-        // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -47,7 +33,6 @@ public class ProfileFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment ProfileFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static ProfileFragment newInstance(String param1, String param2) {
         ProfileFragment fragment = new ProfileFragment();
         Bundle args = new Bundle();
@@ -56,7 +41,6 @@ public class ProfileFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,51 +49,36 @@ public class ProfileFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_profile, container, false);
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         TextInputEditText name = view.findViewById(R.id.profileName);
         TextInputEditText email = view.findViewById(R.id.profileEmail);
         TextInputEditText dob = view.findViewById(R.id.profileDOB);
         TextInputEditText gender = view.findViewById(R.id.profileGender);
         TextInputEditText phone = view.findViewById(R.id.profilePhone);
-
         User currentUser = MyApplication.user;
-
         if (currentUser != null) {
             name.setText(currentUser.getName());
             email.setText(currentUser.getEmail());
-            dob.setText("12/05/1998"); // Arbitrary DOB
+            dob.setText("12/05/1998");
             gender.setText(currentUser.getGender());
-            phone.setText(currentUser.getPhone());
+            phone.setText(currentUser.getCode() + " " + currentUser.getPhone());
         }
-
         TextView btnLogout = view.findViewById(R.id.btnLogout);
         btnLogout.setOnClickListener(v -> {
-            // 1. Set login boolean to False in SharedPreferences
             SharedPreferences sPref = requireContext().getSharedPreferences("User", Context.MODE_PRIVATE);
             sPref.edit().putBoolean("login", false).apply();
-
-            // 2. Set MyApplication.user = null
             MyApplication.user = null;
-
-            // 3. Sign out from Firebase
             FirebaseAuth.getInstance().signOut();
-
-            // 4. Redirect to Welcome activity (contains login/signup)
             Intent intent = new Intent(requireActivity(), Welcome.class);
             startActivity(intent);
             requireActivity().finish();
-
             Toast.makeText(getContext(), "Logged out successfully", Toast.LENGTH_SHORT).show();
         });
     }

@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -10,9 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,17 +18,14 @@ import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-
 public class Product extends AppCompatActivity {
     items product;
     ItemList stock;
     ImageView backbtn, img;
     TextView price, name, model, description;
     MaterialButton buybtn;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,11 +36,8 @@ public class Product extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         init();
-
         product = findProduct();
-
         if (product != null){
             if (product.getImageUrl() != null && !product.getImageUrl().isEmpty()) {
                 Glide.with(this).load(product.getImageUrl()).into(img);
@@ -58,48 +49,36 @@ public class Product extends AppCompatActivity {
             model.setText(product.model);
             description.setText(product.description);
         }
-
         backbtn.setOnClickListener((v) -> {
             startActivity(new Intent(this, Main.class));
             finish();
         });
-
         buybtn.setOnClickListener((v) -> {
             showDialog();
         });
-
     }
-
     private void showDialog(){
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.custom_alert, null);
-
         AlertDialog alert = new AlertDialog.Builder(this)
                 .setView(dialogView)
                 .create();
-
         TextView info;
         MaterialButton btnYes, btnNo;
-
         info = dialogView.findViewById(R.id.dialog_info);
         btnYes = dialogView.findViewById(R.id.dialog_yes);
         btnNo = dialogView.findViewById(R.id.dialog_no);
-
         String text = "Are you sure you want to buy " + product.name + " Model: " + product.model + "?";
-
         info.setText(text);
-
         btnYes.setOnClickListener((v) -> {
-            MyApplication.cart.addItem(product);
+            MyApplication.cartDB.addItem(product);
             MyApplication.updateCart();
-            MyApplication.cartFragment.updateTotal();
             alert.dismiss();
+            Toast.makeText(this, "Added to Cart", Toast.LENGTH_SHORT).show();
         });
-
         btnNo.setOnClickListener((v) -> {
             alert.dismiss();
         });
-
         alert.show();
     }
     private items findProduct(){
@@ -109,17 +88,13 @@ public class Product extends AppCompatActivity {
     }
     private void init(){
         stock = new ItemList();
-
         backbtn = findViewById(R.id.prod_return);
         img = findViewById(R.id.prod_img);
-
         price = findViewById(R.id.prod_price);
         name = findViewById(R.id.prod_name);
         model = findViewById(R.id.prod_model);
         description = findViewById(R.id.prod_desc);
-
         buybtn = findViewById(R.id.buybtn);
-
         stock = MyApplication.stock;
         description.setMovementMethod(new android.text.method.ScrollingMovementMethod());
     }

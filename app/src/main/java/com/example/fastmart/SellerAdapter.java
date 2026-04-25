@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -8,16 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerViewHolder> {
     ArrayList<items> list;
     Context context;
@@ -25,7 +20,6 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
     Set<String> favModels;
     ArrayList<String> favList;
     SharedPreferences.Editor editor;
-
     public SellerAdapter(Context context, ArrayList<items> list){
         this.context = context;
         this.list = list;
@@ -34,14 +28,12 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
         favModels = MyApplication.favModels;
         favList = MyApplication.favList;
     }
-
     @NonNull
     @Override
     public SellerViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.single_recom_layout, parent, false);
         return new SellerViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull SellerViewHolder holder, int position) {
         items item = list.get(position);
@@ -53,13 +45,11 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
         holder.desc.setText(item.getsDesc());
         holder.price.setText(item.getOriginalPrice());
         holder.name.setText(item.getName());
-        
         if(item.isFavourite()){
             holder.fav.setImageResource(R.drawable.ic_favorite_filled);
         } else {
             holder.fav.setImageResource(R.drawable.ic_favorite_empty);
         }
-
         holder.fav.setOnClickListener(v -> {
             item.setFavourite(!item.isFavourite());
             String modelName = item.getModel();
@@ -70,15 +60,11 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
                 favModels.add(modelName);
                 favList.add(modelName);
             }
-
             editor.putStringSet("favModels", new HashSet<>(favModels)).commit();
             managePrivate(item, holder);
         });
-
-        // Items are only for display, no click listener for the card
         holder.card.setOnClickListener(null);
     }
-
     private void managePrivate(items item, @NonNull SellerViewHolder holder){
         if(item.isFavourite()){
             holder.fav.setImageResource(R.drawable.ic_favorite_filled);
@@ -92,12 +78,10 @@ public class SellerAdapter extends RecyclerView.Adapter<SellerAdapter.SellerView
         }
         MyApplication.notifyFavouritesChanged();
     }
-
     @Override
     public int getItemCount() {
         return list.size();
     }
-
     public class SellerViewHolder extends RecyclerView.ViewHolder {
         ImageView img, fav;
         TextView name, price, desc;

@@ -1,15 +1,11 @@
 package com.example.fastmart;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
 import java.util.ArrayList;
-
 public class DBHelper extends SQLiteOpenHelper {
-
     public static final String DBNAME = "FastMart.db";
     public static final String TABLE_CART = "cart";
     public static final String COL_MODEL = "model";
@@ -17,22 +13,18 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String COL_PRICE = "price";
     public static final String COL_IMAGE = "image";
     public static final String COL_QTY = "quantity";
-
     public DBHelper(Context context) {
         super(context, DBNAME, null, 1);
     }
-
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create Table " + TABLE_CART + "(" + COL_MODEL + " TEXT primary key, " +
                 COL_NAME + " TEXT, " + COL_PRICE + " TEXT, " + COL_IMAGE + " INTEGER, " + COL_QTY + " INTEGER)");
     }
-
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("drop Table if exists " + TABLE_CART);
     }
-
     public boolean addToCart(items item) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -41,28 +33,23 @@ public class DBHelper extends SQLiteOpenHelper {
         contentValues.put(COL_PRICE, item.isDotd() ? item.getNewPrice() : item.getOriginalPrice());
         contentValues.put(COL_IMAGE, item.getImage());
         contentValues.put(COL_QTY, 1);
-
         long result = db.insertWithOnConflict(TABLE_CART, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
         return result != -1;
     }
-
     public void updateQuantity(String model, int qty) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put(COL_QTY, qty);
         db.update(TABLE_CART, cv, COL_MODEL + "=?", new String[]{model});
     }
-
     public void deleteFromCart(String model) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TABLE_CART, COL_MODEL + "=?", new String[]{model});
     }
-
     public void clearCart() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+ TABLE_CART);
     }
-
     public ArrayList<items> getCartItems() {
         ArrayList<items> list = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();

@@ -1,9 +1,7 @@
 package com.example.fastmart;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -13,7 +11,6 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.telephony.SmsManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,32 +18,26 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CartFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CartFragment extends Fragment {
-
     RecyclerView recyclerView;
     TextView totalPriceText, shippingPriceText;
     Button checkoutButton;
     CartAdapter cartAdapter;
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
     public CartFragment() {
-        // Required empty public constructor
     }
-
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -55,7 +46,6 @@ public class CartFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment CartFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CartFragment newInstance(String param1, String param2) {
         CartFragment fragment = new CartFragment();
         Bundle args = new Bundle();
@@ -64,7 +54,6 @@ public class CartFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +62,6 @@ public class CartFragment extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -87,25 +74,20 @@ public class CartFragment extends Fragment {
         totalPriceText = view.findViewById(R.id.cart_total);
         shippingPriceText = view.findViewById(R.id.cart_shipping);
         checkoutButton = view.findViewById(R.id.checkoutbtn);
-
-        ArrayList<items> cartItems = MyApplication.cart.getProducts();
-        cartAdapter = new CartAdapter(getContext(), cartItems, new CartAdapter.OnCartChangeListener() {
+        cartAdapter = new CartAdapter(getContext(), MyApplication.cartDB.getAllCartItems(), new CartAdapter.OnCartChangeListener() {
             @Override
             public void onQuantityChanged() {
                 updateTotal();
             }
-
             @Override
             public void onItemRemoved(items item) {
                 updateTotal();
+                MyApplication.updateCart();
             }
         });
-
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(cartAdapter);
-
         updateTotal();
-
         checkoutButton.setOnClickListener(v -> {
             if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
                 sendOrderSms();
@@ -117,37 +99,57 @@ public class CartFragment extends Fragment {
             }
         });
     }
-
-
     public void updateTotal() {
         double total = 0, shipping;
-        String shippingStr = shippingPriceText.getText().toString().replace("$", "").trim();
-        shipping = Double.parseDouble(shippingStr);
-        for (items item : MyApplication.cart.getProducts()) {
-            String priceStr = (item.isDotd() ? item.getNewPrice() : item.getOriginalPrice()).replace("$", "").trim();
-            double price = Double.parseDouble(priceStr);
-            total += price * item.getQuantity();
+        try {
+            String shippingStr = shippingPriceText.getText().toString().replace("$", "").trim();
+            shipping = Double.parseDouble(shippingStr);
+        } catch (Exception e) {
+            shipping = 0;
+        }
+        ArrayList<items> items = MyApplication.cartDB.getAllCartItems();
+        for (items item : items) {
+            try {
+                String priceStr = (item.isDotd() ? item.getNewPrice() : item.getOriginalPrice()).replace("$", "").trim();
+                double price = Double.parseDouble(priceStr);
+                total += price * item.getQuantity();
+            } catch (Exception e) {}
         }
         total += shipping;
         totalPriceText.setText("Total: $" + String.format("%.2f", total));
     }
-
     private void sendOrderSms() {
+        ArrayList<items> cartItems = MyApplication.cartDB.getAllCartItems();
+        if (cartItems.isEmpty()) {
+            return;
+        }
         StringBuilder orderDetails = new StringBuilder("Order Details:\n");
         double total = 0;
-        for (items item : MyApplication.cart.getProducts()) {
+        for (items item : cartItems) {
+            String priceStr = (item.isDotd() ? item.getNewPrice() : item.getOriginalPrice()).replace("$", "").trim();
+            double price = Double.parseDouble(priceStr);
             orderDetails.append(item.getName())
                     .append(" x").append(item.getQuantity())
-                    .append(" - ").append(item.getNewPrice()).append("\n");
-            String priceStr = item.getNewPrice().replace("$", "").trim();
-
-            double price = Double.parseDouble(priceStr);
+                    .append(" - $").append(String.format("%.2f", price * item.getQuantity())).append("\n");
             total += price * item.getQuantity();
         }
         orderDetails.append("Total: $").append(String.format("%.2f", total));
-
         String DestinationAddress = "+923234967783";
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(DestinationAddress, null, orderDetails.toString(), null, null);
+        saveOrderToFirebase(cartItems, total);
+        MyApplication.cartDB.clearCart();
+        MyApplication.updateCart();
+    }
+    private void saveOrderToFirebase(ArrayList<items> items, double total) {
+        DatabaseReference dbRef = FirebaseDatabase.getInstance()
+                .getReference("OrderHistory");
+        String orderId = dbRef.push().getKey();
+        String date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm", java.util.Locale.getDefault()).format(new java.util.Date());
+        String customerName = MyApplication.user != null ? MyApplication.user.getName() : "Guest";
+        Order order = new Order(orderId, date, "$" + String.format("%.2f", total), customerName, items);
+        if (orderId != null) {
+            dbRef.child(orderId).setValue(order);
+        }
     }
 }

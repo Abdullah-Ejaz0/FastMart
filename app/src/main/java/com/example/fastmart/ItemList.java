@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
@@ -9,10 +8,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import androidx.annotation.NonNull;
-
 public class ItemList {
     private final ArrayList<items> products;
-
     ItemList(){
         products = new ArrayList<>();
     }
@@ -24,7 +21,6 @@ public class ItemList {
             }
         }
     }
-
     public ArrayList<items> getFavourites(){
         ArrayList<items> favourites = new ArrayList<>();
         for(items item: products){
@@ -51,22 +47,15 @@ public class ItemList {
                 }
                 MyApplication.notifyFavouritesChanged();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Handle error
             }
         });
     }
-
     public void populatelocal() {
-
         String name, model, newPrice, originalPrice, description, sDesc, type;
         int img;
-
-        int count = 0; // controls DOTD
-
-        // Product 1
+        int count = 0; 
         name = "RØDE PodMic";
         model = "PodMic";
         newPrice = "$108.20";
@@ -78,8 +67,6 @@ public class ItemList {
         sDesc = "Dynamic Microphone";
         type = "Microphone";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 2
         name = "SONY Premium Wireless Headphones";
         model = "WH-1000XM4, Black";
         newPrice = "$349.99";
@@ -91,8 +78,6 @@ public class ItemList {
         sDesc = "Noise Cancelling Headphones";
         type = "Headphones";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 3
         name = "SONY Premium Wireless Headphones";
         model = "WH-1000XM4, Beige";
         newPrice = "$349.99";
@@ -104,8 +89,6 @@ public class ItemList {
         sDesc = "Noise Cancelling Headphones";
         type = "Headphones";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 4
         name = "Sony WF-1000XM6";
         model = "WF1000XM6/SZE";
         newPrice = "$299.99";
@@ -117,8 +100,6 @@ public class ItemList {
         sDesc = "Wireless Noise Cancelling Earbuds";
         type = "Earbuds";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 5
         name = "Sony WH-1000XM6";
         model = "WH-1000XM6";
         newPrice = "$399.99";
@@ -130,8 +111,6 @@ public class ItemList {
         sDesc = "Wireless Noise Cancelling Headphones";
         type = "Headphones";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 6
         name = "Sony IER-EX15C";
         model = "IER-EX15C/PZE";
         newPrice = "$39.99";
@@ -143,8 +122,6 @@ public class ItemList {
         sDesc = "USB-C Wired In-Ear Earphones";
         type = "Earphones";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 7
         name = "Sony ULT FIELD 7";
         model = "SRSULT70";
         newPrice = "$449.00";
@@ -156,8 +133,6 @@ public class ItemList {
         sDesc = "Wireless Portable Speaker";
         type = "Speaker";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 8
         name = "Sony ULT TOWER 9AC";
         model = "SRSULT900AC";
         newPrice = "$1099.00";
@@ -169,8 +144,6 @@ public class ItemList {
         sDesc = "Party Speaker System";
         type = "Speaker";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 9
         name = "Sony Alpha 7R IV";
         model = "ILCE-7RM4A/QAP2";
         newPrice = "$3699.00";
@@ -182,8 +155,6 @@ public class ItemList {
         sDesc = "Full Frame Mirrorless Camera";
         type = "Camera";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 10
         name = "Sony Alpha 1";
         model = "ILCE-1/BQ AP2";
         newPrice = "$6499.00";
@@ -195,10 +166,8 @@ public class ItemList {
         sDesc = "Flagship Mirrorless Camera";
         type = "Camera";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 11
         name = "Sony FE 24-70mm F2.8 GM";
-        model = "SEL2470GM//QSYX";
+        model = "SEL2470GM";
         newPrice = "$2099.00";
         originalPrice = "$2299.00";
         img = R.drawable.fe_24_70;
@@ -208,8 +177,6 @@ public class ItemList {
         sDesc = "Standard Zoom Lens";
         type = "Lens";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 12
         name = "Sony FE 70-200mm F4 Macro G OSS II";
         model = "SEL70200G2/CSYX";
         newPrice = "$1999.00";
@@ -221,8 +188,6 @@ public class ItemList {
         sDesc = "Telephoto Zoom Lens";
         type = "Lens";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 13
         name = "Sony AX43A 4K Handycam";
         model = "FDR-AX43A/BCAU2";
         newPrice = "$999.00";
@@ -234,8 +199,6 @@ public class ItemList {
         sDesc = "4K Camcorder";
         type = "Camera";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 14
         name = "Sony BRAVIA 8 II OLED TV";
         model = "XR BRAVIA 8 II";
         newPrice = "$3499.00";
@@ -247,10 +210,8 @@ public class ItemList {
         sDesc = "4K OLED Smart TV";
         type = "TV";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 15
         name = "Sony HT-A9 Home Theater System";
-        model = "HT-A9//M1 AF1";
+        model = "HT-A9";
         newPrice = "$1999.99";
         originalPrice = "$2499.99";
         img = R.drawable.ht_a9;
@@ -260,8 +221,6 @@ public class ItemList {
         sDesc = "Dolby Atmos Home Theater";
         type = "Home Theater";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 16
         name = "Sony BRAVIA Theatre System 6";
         model = "HT-S60";
         newPrice = "$799.99";
@@ -273,8 +232,6 @@ public class ItemList {
         sDesc = "5.1ch Home Theatre System";
         type = "Home Theater";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 17
         name = "Sony ULT FIELD 5";
         model = "SRS-ULT50/WZE";
         newPrice = "$399.99";
@@ -286,8 +243,6 @@ public class ItemList {
         sDesc = "Wireless Portable Speaker";
         type = "Speaker";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 18
         name = "Sony UBP-X800M2 Blu-ray Player";
         model = "UBP-X800M2";
         newPrice = "$329.99";
@@ -299,8 +254,6 @@ public class ItemList {
         sDesc = "4K Ultra HD Blu-ray Player";
         type = "Media Player";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 19
         name = "PlayStation 5 Pro";
         model = "PS5 Pro 2TB";
         newPrice = "$749.00";
@@ -312,8 +265,6 @@ public class ItemList {
         sDesc = "Next-Gen Gaming Console";
         type = "Gaming";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 20
         name = "Sony DualSense Wireless Controller";
         model = "DualSense";
         newPrice = "$74.00";
@@ -325,8 +276,6 @@ public class ItemList {
         sDesc = "Wireless Gaming Controller";
         type = "Gaming";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 21
         name = "Sony PULSE Elite Wireless Headset";
         model = "PULSE Elite";
         newPrice = "$149.00";
@@ -338,8 +287,6 @@ public class ItemList {
         sDesc = "Wireless Gaming Headset";
         type = "Gaming";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 22
         name = "Sony INZONE H9 Gaming Headset";
         model = "WH-G900N/WZ E";
         newPrice = "$299.99";
@@ -351,8 +298,6 @@ public class ItemList {
         sDesc = "Noise Cancelling Gaming Headset";
         type = "Gaming";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
-
-        // Product 23
         name = "Sony Xperia 1 VII";
         model = "Xperia 1 VII";
         newPrice = "$1299.99";
@@ -365,7 +310,6 @@ public class ItemList {
         type = "Mobile";
         products.add(new items(name, model, newPrice, originalPrice, description, sDesc, img, type, count++ < 3));
     }
-
     items getProduct(String model){
         for(items product: products){
             if (Objects.equals(model, product.model)){
@@ -374,15 +318,12 @@ public class ItemList {
         }
         return null;
     }
-
     public void addItem(items item){
         products.add(item);
     }
-
     public void removeItem(String Model){
         products.removeIf(product -> product.model.equals(Model));
     }
-
     public ArrayList<items> getDotdProducts() {
         ArrayList<items> dotdList = new ArrayList<>();
         for (items item : products) {
@@ -392,7 +333,6 @@ public class ItemList {
         }
         return dotdList;
     }
-
     public ArrayList<items> getRecomProducts() {
         ArrayList<items> recomList = new ArrayList<>();
         for (items item : products) {
@@ -402,7 +342,6 @@ public class ItemList {
         }
         return recomList;
     }
-
     public ArrayList<items> getProducts() {
         return products;
     }

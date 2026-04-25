@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -7,13 +6,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import android.content.SharedPreferences;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
@@ -22,11 +19,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
 public class Info_Page extends AppCompatActivity {
     FirebaseAuth auth;
     FirebaseUser user;
-
     FirebaseDatabase fbDatabase;
     DatabaseReference dbReference;
     TextInputEditText etFullName, etAccountType, etPhoneNumber, etCountry, etAddress, etCountryCode;
@@ -35,40 +30,31 @@ public class Info_Page extends AppCompatActivity {
     CheckBox cbTerms;
     MaterialButton btnSaveProfile;
     String email, password;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_info_page);
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         init();
         setupGenderToggle();
-
         btnSaveProfile.setOnClickListener(v -> {
             collectInputsAndSave();
         });
     }
-
     private void init() {
         Intent i = getIntent();
         email = i.getStringExtra("email");
         password = i.getStringExtra("password");
-
         auth = FirebaseAuth.getInstance();
         auth.getFirebaseAuthSettings().setAppVerificationDisabledForTesting(true);
         user = auth.getCurrentUser();
-
         fbDatabase = FirebaseDatabase.getInstance();
         dbReference = fbDatabase.getReference("Users");
-
         etFullName = findViewById(R.id.etFullName);
         etAccountType = findViewById(R.id.etAccountType);
         etCountryCode = findViewById(R.id.countryCode);
@@ -81,7 +67,6 @@ public class Info_Page extends AppCompatActivity {
         cbTerms = findViewById(R.id.cbTerms);
         btnSaveProfile = findViewById(R.id.btnSaveProfile);
     }
-
     private void setupGenderToggle() {
         genderToggleGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
             if (isChecked) {
@@ -95,7 +80,6 @@ public class Info_Page extends AppCompatActivity {
             }
         });
     }
-
     private void collectInputsAndSave() {
         String fullName = etFullName.getText().toString().trim();
         String accountType = etAccountType.getText().toString().trim();
@@ -104,7 +88,6 @@ public class Info_Page extends AppCompatActivity {
         String country = etCountry.getText().toString().trim();
         String address = etAddress.getText().toString().trim();
         boolean agreed = cbTerms.isChecked();
-
         int checkedId = genderToggleGroup.getCheckedButtonId();
         String gender = "";
         if (checkedId == R.id.btnMale) {
@@ -112,22 +95,17 @@ public class Info_Page extends AppCompatActivity {
         } else if (checkedId == R.id.btnFemale) {
             gender = "Female";
         }
-
         if (fullName.isEmpty() || accountType.isEmpty() || code.isEmpty() || phone.isEmpty() ||
                 country.isEmpty() || address.isEmpty() || gender.isEmpty()) {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-
         if (!agreed) {
             Toast.makeText(this, "Please agree to the Terms and Conditions", Toast.LENGTH_SHORT).show();
             return;
         }
-
         MyApplication.user = new User(email, fullName, accountType, code, phone, gender, country, address);
-
         if (user != null) {
-            // Save user session to SharedPreferences
             SharedPreferences sharedPreferences = getSharedPreferences("User", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("userId", user.getUid());
@@ -140,7 +118,6 @@ public class Info_Page extends AppCompatActivity {
             editor.putString("userAddress", address);
             editor.putBoolean("login", true);
             editor.apply();
-
             dbReference.child(user.getUid()).setValue(MyApplication.user)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(Info_Page.this, "Profile Saved Successful!", Toast.LENGTH_SHORT).show();

@@ -19,31 +19,53 @@ public class MyApplication extends Application {
     public static ArrayList<String> favList;
     public static ItemList stock;
     public static ItemList cart;
-    public static BadgeDrawable favouritesBadge;
+    public static BadgeDrawable favouritesBadge, cartBadge;
     public static User user;
+    public static FavDBManager favDB;
+    public static CartDBManager cartDB;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        favDB = new FavDBManager(this);
+        favDB.open();
+
+        cartDB = new CartDBManager(this);
+        cartDB.open();
+
         stock = new ItemList();
         stock.populate(); // Start listening to Firebase
         cart = new ItemList();
-        SharedPreferences sPref = getSharedPreferences("FavouritesPrefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sPref.edit();
-        favModels = new HashSet<>(sPref.getStringSet("favModels", new HashSet<>()));
-        favList = new ArrayList<>(favModels);
+        
+        // Load favourites from SQLite
+        ArrayList<items> savedFavs = favDB.getAllFavourites();
+        favModels = new HashSet<>();
+        favList = new ArrayList<>();
+        for (items item : savedFavs) {
+            favModels.add(item.getModel());
+            favList.add(item.getModel());
+        }
     }
 
     public static void updateCart(){
         if (cartFragment != null && cartFragment.cartAdapter != null){
-            cartFragment.cartAdapter.notifyDataSetChanged();
+            cartFragment.cartAdapter.updateData(cartDB.getAllCartItems());
             cartFragment.updateTotal();
+        }
+        int count = cartDB.getAllCartItems().size();
+        if (cartBadge != null) {
+            cartBadge.setVisible(count > 0);
+            cartBadge.setNumber(count);
         }
     }
     public static void notifyFavouritesChanged() {
-        if (homeFragment != null && homeFragment.dotdAdapter != null && homeFragment.recomAdapter != null) {
-            homeFragment.dotdAdapter.notifyDataSetChanged();
-            homeFragment.recomAdapter.notifyDataSetChanged();
+        if (homeFragment != null) {
+            if (homeFragment.dotdAdapter != null) {
+                homeFragment.dotdAdapter.updateList(stock.getDotdProducts());
+            }
+            if (homeFragment.recomAdapter != null) {
+                homeFragment.recomAdapter.updateList(stock.getRecomProducts());
+            }
         }
 
         if (favouritesFragment != null && favouritesFragment.adapter != null) {

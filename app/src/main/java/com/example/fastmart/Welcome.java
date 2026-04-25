@@ -1,12 +1,10 @@
 package com.example.fastmart;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TableLayout;
 import android.widget.Toast;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,28 +13,22 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.widget.ViewPager2;
-
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 public class Welcome extends AppCompatActivity {
     TabLayout WelcomeTab;
     ViewPager2 WelcomePager;
     WelcomePagerAdapter adapter;
     TabLayoutMediator mediator;
-
     SharedPreferences sPref;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,50 +39,15 @@ public class Welcome extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
         init();
-
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        if (sPref.getBoolean("login", false) && firebaseUser != null) {
-            // Re-fetch user data to populate MyApplication.user
-            FirebaseDatabase.getInstance().getReference("Users")
-                    .child(firebaseUser.getUid())
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()) {
-                                MyApplication.user = snapshot.getValue(User.class);
-                                String accountType = sPref.getString("accountType", "");
-                                if ("Seller".equalsIgnoreCase(accountType)) {
-                                    startActivity(new Intent(Welcome.this, Seller_Home.class));
-                                } else {
-                                    startActivity(new Intent(Welcome.this, Main.class));
-                                }
-                                finish();
-                            } else {
-                                // Data missing, force re-login
-                                proceedToWelcome();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            proceedToWelcome();
-                        }
-                    });
-        }
     }
-
     private void proceedToWelcome() {
-        // Keep the user on the welcome screen if auto-login fails
     }
-
     private void init(){
         WelcomeTab = findViewById(R.id.welcome_tab);
         WelcomePager = findViewById(R.id.welcome_Pager);
         adapter = new WelcomePagerAdapter(this);
         WelcomePager.setAdapter(adapter);
-
         mediator = new TabLayoutMediator(
                 WelcomeTab,
                 WelcomePager,
@@ -109,7 +66,6 @@ public class Welcome extends AppCompatActivity {
                 }
         );
         mediator.attach();
-
         sPref = getSharedPreferences("User", MODE_PRIVATE);
     }
 }

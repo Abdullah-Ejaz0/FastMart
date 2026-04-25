@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -8,39 +7,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
-
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
-
     public ArrayList<items> cartItems;
     public Context context;
     public OnCartChangeListener listener;
-
     public interface OnCartChangeListener {
         void onQuantityChanged();
         void onItemRemoved(items item);
     }
-
     public CartAdapter(Context context, ArrayList<items> cartItems, OnCartChangeListener listener){
         this.context = context;
         this.cartItems = cartItems;
         this.listener = listener;
     }
-
     @NonNull
     @Override
     public CartViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.single_cart_item_design, parent, false);
         return new CartViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
         items item = cartItems.get(position);
@@ -49,53 +40,45 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         holder.newPrice.setText(item.getNewPrice());
         holder.originalPrice.setText(item.getOriginalPrice());
         holder.quantity.setText(String.valueOf(item.getQuantity()));
-
         if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
             Glide.with(context).load(item.getImageUrl()).into(holder.image);
         } else {
             holder.image.setImageResource(item.getImage());
         }
-
         if(item.getQuantity() <= 1){
             holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.gray));
         } else {
             holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black));
         }
-
         if(item.isDotd()){
             holder.originalPrice.setVisibility(View.VISIBLE);
             holder.newPrice.setText(item.getNewPrice());
             holder.originalPrice.setText(item.getOriginalPrice());
-
             holder.originalPrice.setPaintFlags(
                     holder.originalPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG
             );
-
             holder.newPrice.setTextColor(ContextCompat.getColor(context, R.color.red));
-
         } else {
             holder.originalPrice.setVisibility(View.INVISIBLE);
-
             holder.originalPrice.setPaintFlags(
                     holder.originalPrice.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG)
             );
-
             holder.newPrice.setText(item.getOriginalPrice());
             holder.newPrice.setTextColor(ContextCompat.getColor(context, R.color.black));
         }
-
         holder.add.setOnClickListener(v -> {
             item.quantity++;
+            MyApplication.cartDB.updateQuantity(item.getModel(), item.getQuantity());
             holder.quantity.setText(String.valueOf(item.getQuantity()));
             if(item.getQuantity() > 1){
-                holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.grey));
+                holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.black));
             }
             listener.onQuantityChanged();
         });
-
         holder.remove.setOnClickListener(v -> {
             if(item.getQuantity() > 1){
                 item.quantity--;
+                MyApplication.cartDB.updateQuantity(item.getModel(), item.getQuantity());
                 holder.quantity.setText(String.valueOf(item.getQuantity()));
                 if(item.getQuantity() == 1){
                     holder.remove.setCardBackgroundColor(ContextCompat.getColor(context, R.color.gray));
@@ -103,26 +86,23 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
                 listener.onQuantityChanged();
             }
         });
-
         holder.dotMenu.setOnClickListener(v -> {
+            MyApplication.cartDB.removeItem(item.getModel());
             cartItems.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, cartItems.size());
             listener.onItemRemoved(item);
         });
     }
-
     @Override
     public int getItemCount() {
         return cartItems.size();
     }
-
     static class CartViewHolder extends RecyclerView.ViewHolder{
         ImageView image;
         TextView name, model, newPrice, originalPrice, quantity;
         CardView add, remove;
         ImageView dotMenu;
-
         public CartViewHolder(@NonNull View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.fav_img);
@@ -136,7 +116,6 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             dotMenu = itemView.findViewById(R.id.fav_more);
         }
     }
-
     public void updateData(ArrayList<items> newList){
         this.cartItems = newList;
         notifyDataSetChanged();

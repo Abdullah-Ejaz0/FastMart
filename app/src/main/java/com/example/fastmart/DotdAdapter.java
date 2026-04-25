@@ -1,5 +1,4 @@
 package com.example.fastmart;
-
 import android.content.ClipData;
 import android.content.Context;
 import android.content.Intent;
@@ -11,17 +10,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder> {
     ArrayList<items> list;
     Context context;
@@ -29,7 +24,6 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
     SharedPreferences.Editor editor;
     Set<String> favModels;
     ArrayList<String> favList;
-
     public DotdAdapter(Context context, ArrayList<items> list){
         this.context = context;
         this.list = list;
@@ -38,14 +32,16 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
         favModels = MyApplication.favModels;
         favList = MyApplication.favList;
     }
-
+    public void updateList(ArrayList<items> newList) {
+        this.list = newList;
+        notifyDataSetChanged();
+    }
     @NonNull
     @Override
     public DotdViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.single_dotd_item_layout, parent, false);
         return new DotdViewHolder(view);
     }
-
     @Override
     public void onBindViewHolder(@NonNull DotdViewHolder holder, int position) {
         items item = list.get(position);
@@ -65,25 +61,20 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
         }else{
             holder.fav.setImageResource(R.drawable.ic_favorite_empty);
         }
-
         holder.fav.setOnClickListener(v -> {
             item.setFavourite(!item.isFavourite());
             String modelName = item.getModel();
             if (favModels.contains(modelName)) {
                 favModels.remove(modelName);
                 favList.remove(modelName);
+                MyApplication.favDB.removeFavourite(modelName);
             } else {
                 favModels.add(modelName);
                 favList.add(modelName);
+                MyApplication.favDB.addFavourite(item);
             }
-
-
-            editor.putStringSet("favModels", new HashSet<>(favModels))
-                    .commit();
             managePrivate(item, holder);
-
         });
-
         holder.card.setOnClickListener(v -> {
             Intent i = new Intent(context, Product.class);
             i.putExtra("Name", item.getModel());
@@ -101,12 +92,10 @@ public class DotdAdapter extends RecyclerView.Adapter<DotdAdapter.DotdViewHolder
         MyApplication.favouritesBadge.setNumber(number);
         MyApplication.notifyFavouritesChanged();
     }
-
     @Override
     public int getItemCount() {
         return list.size();
     }
-
     public class DotdViewHolder extends RecyclerView.ViewHolder
     {
         ImageView img, fav;
