@@ -23,8 +23,10 @@ public class OrderHistory extends AppCompatActivity {
     OrderHistoryAdapter adapter;
     ArrayList<Order> orderList;
     ImageView btnBack;
-    DatabaseReference dbRef;
     FirebaseAuth auth;
+    com.google.firebase.auth.FirebaseUser user;
+    FirebaseDatabase database;
+    DatabaseReference reference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,11 @@ public class OrderHistory extends AppCompatActivity {
         fetchOrderHistory();
     }
     private void init() {
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("OrderHistory");
+
         rvOrderHistory = findViewById(R.id.rvOrderHistory);
         btnBack = findViewById(R.id.btnBack);
         orderList = new ArrayList<>();
@@ -49,11 +56,10 @@ public class OrderHistory extends AppCompatActivity {
         rvOrderHistory.setLayoutManager(new LinearLayoutManager(this));
         rvOrderHistory.setAdapter(adapter);
         btnBack.setOnClickListener(v -> finish());
-        dbRef = FirebaseDatabase.getInstance().getReference("OrderHistory");
     }
     private void fetchOrderHistory() {
-        if (dbRef == null) return;
-        dbRef.addValueEventListener(new ValueEventListener() {
+        if (reference == null) return;
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 orderList.clear();

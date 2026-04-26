@@ -16,6 +16,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,6 +34,9 @@ public class Login extends Fragment {
     SharedPreferences sPref;
     SharedPreferences.Editor editor;
     FirebaseAuth auth;
+    FirebaseUser user;
+    FirebaseDatabase database;
+    DatabaseReference reference;
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -106,6 +110,7 @@ public class Login extends Fragment {
                                                 editor.putString("userAddress", user.getResidential_add());
                                                 editor.putBoolean("login", true);
                                                 editor.apply();
+
                                                 if ("Seller".equalsIgnoreCase(user.getAccountType())) {
                                                     startActivity(new Intent(requireActivity(), Seller_Home.class));
                                                 } else {
@@ -140,5 +145,8 @@ public class Login extends Fragment {
         sPref = view.getContext().getSharedPreferences("User", Context.MODE_PRIVATE);
         editor = sPref.edit();
         auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
     }
 }

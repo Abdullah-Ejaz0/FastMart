@@ -1,7 +1,7 @@
 package com.example.fastmart;
 import java.io.Serializable;
 public class items implements Serializable {
-    public String name, model, newPrice, originalPrice, description, sDesc, type, imageUrl;
+    public String name, model, newPrice, originalPrice, description, sDesc, type, imageUrl, sellerId;
     int image, quantity;
     boolean favourite, dotd;
     public items() {} 
@@ -18,6 +18,7 @@ public class items implements Serializable {
         this.type = type;
         this.originalPrice = originalPrice;
         this.imageUrl = "";
+        this.sellerId = "default_seller"; // Set a default or actual seller ID
     }
     public boolean isDotd() {
         return dotd;

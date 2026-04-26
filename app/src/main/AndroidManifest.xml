@@ -22,6 +22,12 @@
         android:theme="@style/Theme.FastMart"
         android:windowSoftInputMode="stateHidden|adjustResize">
         <activity
+            android:name=".ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ChatListActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddProduct"
             android:exported="false" />
         <activity

@@ -30,4 +30,17 @@
 
         android:layout_alignParentBottom="true"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabChat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/MainTab"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_chat"
+        app:backgroundTint="@color/white"
+        app:tint="@color/black"
+        app:fabSize="normal"
+        app:elevation="6dp" />
+
 </RelativeLayout>

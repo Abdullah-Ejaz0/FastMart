@@ -10,6 +10,9 @@ import com.google.firebase.database.DatabaseError;
 import androidx.annotation.NonNull;
 public class ItemList {
     private final ArrayList<items> products;
+    private com.google.firebase.database.FirebaseDatabase database;
+    private com.google.firebase.database.DatabaseReference reference;
+
     ItemList(){
         products = new ArrayList<>();
     }
@@ -31,8 +34,9 @@ public class ItemList {
         return favourites;
     }
     public void populate() {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("products");
-        dbRef.addValueEventListener(new ValueEventListener() {
+        database = com.google.firebase.database.FirebaseDatabase.getInstance();
+        reference = database.getReference("products");
+        reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 products.clear();

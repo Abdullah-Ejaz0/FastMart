@@ -32,6 +32,12 @@ public class CartFragment extends Fragment {
     TextView totalPriceText, shippingPriceText;
     Button checkoutButton;
     CartAdapter cartAdapter;
+
+    com.google.firebase.auth.FirebaseAuth auth;
+    com.google.firebase.auth.FirebaseUser user;
+    com.google.firebase.database.FirebaseDatabase database;
+    com.google.firebase.database.DatabaseReference reference;
+
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private String mParam1;
@@ -70,6 +76,12 @@ public class CartFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         MyApplication.cartFragment = this;
+
+        auth = com.google.firebase.auth.FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = com.google.firebase.database.FirebaseDatabase.getInstance();
+        reference = database.getReference("OrderHistory");
+
         recyclerView = view.findViewById(R.id.rv_cart);
         totalPriceText = view.findViewById(R.id.cart_total);
         shippingPriceText = view.findViewById(R.id.cart_shipping);
@@ -142,14 +154,12 @@ public class CartFragment extends Fragment {
         MyApplication.updateCart();
     }
     private void saveOrderToFirebase(ArrayList<items> items, double total) {
-        DatabaseReference dbRef = FirebaseDatabase.getInstance()
-                .getReference("OrderHistory");
-        String orderId = dbRef.push().getKey();
+        String orderId = reference.push().getKey();
         String date = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm", java.util.Locale.getDefault()).format(new java.util.Date());
         String customerName = MyApplication.user != null ? MyApplication.user.getName() : "Guest";
         Order order = new Order(orderId, date, "$" + String.format("%.2f", total), customerName, items);
         if (orderId != null) {
-            dbRef.child(orderId).setValue(order);
+            reference.child(orderId).setValue(order);
         }
     }
 }

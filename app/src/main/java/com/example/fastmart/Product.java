@@ -74,7 +74,6 @@ public class Product extends AppCompatActivity {
             MyApplication.cartDB.addItem(product);
             MyApplication.updateCart();
             alert.dismiss();
-            Toast.makeText(this, "Added to Cart", Toast.LENGTH_SHORT).show();
         });
         btnNo.setOnClickListener((v) -> {
             alert.dismiss();

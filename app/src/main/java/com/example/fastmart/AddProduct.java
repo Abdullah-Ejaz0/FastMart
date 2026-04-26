@@ -11,6 +11,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -18,6 +20,11 @@ public class AddProduct extends AppCompatActivity {
 
     TextInputEditText etProductName, etProductType, etProductPrice, etProductDescription;
     Button btnAddProduct;
+
+    FirebaseAuth auth;
+    FirebaseUser user;
+    FirebaseDatabase database;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +41,11 @@ public class AddProduct extends AppCompatActivity {
     }
 
     private void init() {
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference("products");
+
         etProductName = findViewById(R.id.etProductName);
         etProductType = findViewById(R.id.etProductType);
         etProductPrice = findViewById(R.id.etProductPrice);
@@ -54,7 +66,7 @@ public class AddProduct extends AppCompatActivity {
             return;
         }
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("products");
+        DatabaseReference dbRef = database.getReference("products");
         String productId = dbRef.push().getKey();
 
         if (productId != null) {
@@ -71,6 +83,7 @@ public class AddProduct extends AppCompatActivity {
                     false
             );
             newItem.setImageUrl("");
+            newItem.sellerId = user.getUid();
 
             dbRef.child(productId).setValue(newItem)
                     .addOnSuccessListener(aVoid -> {

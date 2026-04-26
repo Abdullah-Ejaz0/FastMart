@@ -40,6 +40,8 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
     @Override
     public void onBindViewHolder(@NonNull FavouriteViewHolder holder, int position) {
         items item = MyApplication.stock.getProduct(favouriteList.get(position));
+        if (item == null) return;
+
         if (item.getImageUrl() != null && !item.getImageUrl().isEmpty()) {
             Glide.with(context).load(item.getImageUrl()).into(holder.img);
         } else {
@@ -66,7 +68,6 @@ public class FavouriteAdapter extends RecyclerView.Adapter<FavouriteAdapter.Favo
         holder.cart.setOnClickListener(v -> {
             MyApplication.cartDB.addItem(item);
             MyApplication.updateCart();
-            Toast.makeText(context, "Added to Cart", Toast.LENGTH_SHORT).show();
         });
         holder.more.setOnClickListener(v -> {
             showDeleteDialog(item, position);

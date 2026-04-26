@@ -63,6 +63,9 @@ public class Seller_Home extends AppCompatActivity implements NavigationView.OnN
         fabAddProduct.setOnClickListener((v) -> {
             startActivity(new Intent(this, AddProduct.class));
         });
+        findViewById(R.id.fabChatSeller).setOnClickListener(v -> {
+            startActivity(new Intent(this, ChatActivity.class));
+        });
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {

@@ -86,6 +86,19 @@
                 app:elevation="6dp"
                 app:fabSize="normal"
                 android:contentDescription="@string/add_product" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/fabChatSeller"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="100dp"
+                android:src="@drawable/ic_chat"
+                app:backgroundTint="@color/white"
+                app:tint="@color/black"
+                app:fabSize="normal"
+                app:elevation="6dp" />
         </FrameLayout>
     </LinearLayout>
 

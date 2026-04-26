@@ -68,11 +68,16 @@ public class HomeFragment extends Fragment {
         rvRecom = view.findViewById(R.id.rvRecom);
         rvDOTD.setHasFixedSize(true);
         rvRecom.setHasFixedSize(true);
+        
         dotdAdapter = new DotdAdapter(view.getContext(), MyApplication.stock.getDotdProducts());
         rvDOTD.setAdapter(dotdAdapter);
+        rvDOTD.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
+
         recomAdapter = new RecomAdapter(view.getContext(), MyApplication.stock.getRecomProducts());
         rvRecom.setAdapter(recomAdapter);
-        rvDOTD.setLayoutManager(new LinearLayoutManager(view.getContext(), LinearLayoutManager.HORIZONTAL, false));
         rvRecom.setLayoutManager(new GridLayoutManager(view.getContext(), 2));
+
+        dotdAdapter.updateList(MyApplication.stock.getDotdProducts());
+        recomAdapter.updateList(MyApplication.stock.getRecomProducts());
     }
 }

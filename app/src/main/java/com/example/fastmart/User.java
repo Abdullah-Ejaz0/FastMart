@@ -1,6 +1,6 @@
 package com.example.fastmart;
 public class User {
-    String email, name, accountType, phone, gender, country, residential_add, code;
+    String email, name, accountType, phone, gender, country, residential_add, code, uid;
     public User() {}
     public User(String email, String name, String accountType, String code, String phone, String gender, String country, String residential_add){
         this.email = email;
@@ -11,6 +11,12 @@ public class User {
         this.country = country;
         this.residential_add = residential_add;
         this.code = code;
+    }
+    public String getUid() {
+        return uid;
+    }
+    public void setUid(String uid) {
+        this.uid = uid;
     }
     public String getEmail(){
         return email;

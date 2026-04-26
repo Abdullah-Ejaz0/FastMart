@@ -34,6 +34,9 @@ public class Main extends AppCompatActivity {
         manager = getSupportFragmentManager();
         MainTab = findViewById(R.id.MainTab);
         MainPager = findViewById(R.id.MainPager);
+        findViewById(R.id.fabChat).setOnClickListener(v -> {
+            startActivity(new android.content.Intent(Main.this, ChatActivity.class));
+        });
         adapter = new MainPagerAdapter(this);
         MainPager.setAdapter(adapter);
         mediator = new TabLayoutMediator(
