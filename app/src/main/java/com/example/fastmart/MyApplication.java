@@ -4,6 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.fastmart.activities.*;
+import com.example.fastmart.fragments.*;
+import com.example.fastmart.models.*;
+import com.example.fastmart.db.*;
 import com.google.android.material.badge.BadgeDrawable;
 
 import java.util.ArrayList;
@@ -34,10 +38,9 @@ public class MyApplication extends Application {
         cartDB.open();
 
         stock = new ItemList();
-        stock.populate(); // Start listening to Firebase
+        stock.populate();
         cart = new ItemList();
-        
-        // Load favourites from SQLite
+
         ArrayList<items> savedFavs = favDB.getAllFavourites();
         favModels = new HashSet<>();
         favList = new ArrayList<>();
@@ -77,3 +80,9 @@ public class MyApplication extends Application {
         }
     }
 }
+
+
+
+
+
+
